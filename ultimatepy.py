@@ -1,14 +1,6 @@
 import numpy as np
 from numpy import genfromtxt
 
-class ProcessDirector:
-    def __init__(self):
-        self.allClasses = []
-
-    def construct(self,className,builderName):
-        targetClass = getattr(str(builderName),className)
-        print(targetClass)
-
 class Tournament:
     def __init__(self,name):
         self.name = name
@@ -19,7 +11,8 @@ class Tournament:
 
     def import_teams(self,list):
         self.team_list = list
-
+        print("Team list imported:")
+        print(self.team_list)
 
     def get_team_list(self):
         for item in range(len(self.team_list)):
