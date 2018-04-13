@@ -8,10 +8,13 @@ swsc.import_teams(list_of_teams)
 
 print(swsc.team_list[0])
 
-for team_number in range(1,len(list_of_teams)+1):
-    team_number_str = str(team_number)
-    ob_name = "team"+team_number_str
+teamDict = {}
 
+for team_number in range(len(list_of_teams)):
+    teamDict[list_of_teams[team_number]] = up.Team(list_of_teams[team_number])
+
+for team in teamDict:
+    team = teamDict[team]
 
 #swsc.get_team_list()
 
