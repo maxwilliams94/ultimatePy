@@ -9,6 +9,7 @@ class Tournament:
         self.numberOfGroups = 0
         self.teamList = []
         self.possGroupings = []
+        self.teamDict = {}
         self.groupDict = {}
 
     def importTeams(self, list):
@@ -16,9 +17,14 @@ class Tournament:
         print("Team list imported:")
         print(str(len(self.teamList)) + " Teams\n")
         self.size = len(self.teamList)
+        # create team objects
+        for teamNumber, team in enumerate(self.teamList):
+            self.teamDict[str(team)] = Team(str(team))
+            self.teamDict[team].setSeed(teamNumber + 1)
         for groupSize in range(1,10):
             if (self.size/groupSize) % 2 == 0:
                 self.possGroupings.append(groupSize)
+
 
         if len(self.possGroupings) == 0:
             print("No possible groupings")
@@ -38,15 +44,10 @@ class Tournament:
                 self.groupDict[str(chr(code))] = Group(chr(code))
                 self.groupDict[str(chr(code))].size = int(self.size)/int(self.numberOfGroups)
 
-
-
-
     def getTeamList(self):
         for item in range(len(self.teamList)):
             print(str(item+1) + " " + str(self.teamList[item]))
 
-    #def create_teams(self):
-        #for index,name_of_team in enumerate(self.team_list):
 
 
 class Group:
