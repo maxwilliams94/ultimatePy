@@ -11,6 +11,7 @@ class Tournament:
         self.possGroupings = []
         self.teamDict = {}
         self.groupDict = {}
+        self.seedDict = {}
 
     def importTeams(self, list):
         self.teamList = list
@@ -21,6 +22,7 @@ class Tournament:
         for teamNumber, team in enumerate(self.teamList):
             self.teamDict[str(team)] = Team(str(team))
             self.teamDict[team].setSeed(teamNumber + 1)
+            self.seedDict[str(teamNumber+1)] = Team(str(Team))
         for groupSize in range(1,10):
             if (self.size/groupSize) % 2 == 0:
                 self.possGroupings.append(groupSize)
