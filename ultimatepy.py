@@ -57,6 +57,7 @@ class Group:
         self.identifier = "0"
         self.size = size
         self.type = "-1"
+        self.teamList = []
 
 class Team:
     def __init__(self,name):
