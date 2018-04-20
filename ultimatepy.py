@@ -77,3 +77,17 @@ class Team:
 
 
 
+if __name__ == '__main__':
+    list_of_teams = ['Bristol 1','Bath 2','Bristol 2','Bath 1', 'Cardiff 1', 'Swansea 1', 'Bears 1', 'UWE 2']
+
+    swsc = Tournament('South West Super Cup')
+
+
+    swsc.importTeams(list_of_teams)
+
+    swsc.setGroupSizes()
+
+    swsc.getTeamList()
+
+
+
