@@ -11,7 +11,9 @@ class Tournament:
         self.possGroupings = []
         self.teamDict = {}
         self.groupDict = {}
+        self.groupList = []
         self.seedDict = {}
+        self.seedList = []
 
     def importTeams(self, list):
         self.teamList = list
@@ -23,6 +25,7 @@ class Tournament:
             self.teamDict[str(team)] = Team(str(team))
             self.teamDict[team].setSeed(teamNumber + 1)
             self.seedDict[str(teamNumber+1)] = Team(str(Team))
+            self.seedList.append(teamNumber)
         for groupSize in range(1,10):
             if (self.size/groupSize) % 2 == 0:
                 self.possGroupings.append(groupSize)
@@ -45,6 +48,11 @@ class Tournament:
             for code in range(65,65+int(self.numberOfGroups)):
                 self.groupDict[str(chr(code))] = Group(chr(code))
                 self.groupDict[str(chr(code))].size = int(self.size)/int(self.numberOfGroups)
+                self.groupList.append(str(chr(code)))
+
+    def assignGroupSeeds(self):
+        # assign team seeds into group seedLists
+        # these will then be used to assign objects to the seedDict
 
     def getTeamList(self):
         for item in range(len(self.teamList)):
@@ -74,20 +82,19 @@ class Team:
 
     def getSeed(self):
         print(self.seed)
+    def __repr__(self):
+        return '{}: {}'.format(self.seed,self.name)
 
 
 
 if __name__ == '__main__':
-    list_of_teams = ['Bristol 1','Bath 2','Bristol 2','Bath 1', 'Cardiff 1', 'Swansea 1', 'Bears 1', 'UWE 2']
-
     swsc = Tournament('South West Super Cup')
 
-
-    swsc.importTeams(list_of_teams)
+    swsc.importTeams(['Bristol 1','Bath 2','Bristol 2','Bath 1', 'Cardiff 1', 'Swansea 1', 'Bears 1', 'UWE 2'])
 
     swsc.setGroupSizes()
 
-    swsc.getTeamList()
+    swsc.assignGroupSeeds()
 
 
 
