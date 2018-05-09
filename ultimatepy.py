@@ -112,15 +112,16 @@ class Team:
 
 
 # if __name__ == '__main__':
-swsc = Tournament('South West Super Cup')
+swsc = Tournament('South West Super Cup') # create single tournament object
 
+# important team list
 swsc.importTeams(['Bristol 1','Bath 2','Bristol 2','Bath 1', 'Cardiff 1', 'Swansea 1', 'Bears 1', 'UWE 2'])
 
 # swsc.getTeamList()
 
-swsc.setGroupSizes()
+swsc.setGroupSizes() # offer choice of groupings from equal divisions
 
-swsc.assignGroupSeeds()
+swsc.assignGroupSeeds() # creates group object and assigns according to seeds
 
 
 
