@@ -1,6 +1,3 @@
-import numpy as np
-from numpy import genfromtxt
-
 class Tournament:
     def __init__(self,name):
         self.name = name
