@@ -1,3 +1,5 @@
+
+
 class Team:
     def __init__(self, name, seed):
         self.name = name
@@ -18,16 +20,21 @@ class Team:
 
 
 if __name__ == '__main__':
-    tournamentName = input("Tournament Name: ")
+    #tournamentName = input("Tournament Name: ")
 
-# import team list
+    # import team list
+    teamList = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
+    # count number of teams
+    numTeams = len(teamList)
+    # get number of groups
+    numGroups = len(teamList)/4
+    print("{} Groups of 4 Teams".format(numGroups))
 
-# count number of teams
+    # Create team objects in teamDict
+    teamDict = {}
+    for teamNumber,team in enumerate(teamList):
+        teamDict[str(team)] = Team(str(team),teamNumber+1)
 
-# get number of groups
 
-# calculate group sizes
-
-# choose group size
-
-# assign teams to groups according to seed
+    print(teamDict)
+    # assign teams to groups according to seed
