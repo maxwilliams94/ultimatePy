@@ -19,22 +19,4 @@ class Team:
         return '{}: {}'.format(self.seed,self.name)
 
 
-if __name__ == '__main__':
-    #tournamentName = input("Tournament Name: ")
-
-    # import team list
-    teamList = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
-    # count number of teams
-    numTeams = len(teamList)
-    # get number of groups
-    numGroups = len(teamList)/4
-    print("{} Groups of 4 Teams".format(numGroups))
-
-    # Create team objects in teamDict
-    teamDict = {}
-    for teamNumber,team in enumerate(teamList):
-        teamDict[str(team)] = Team(str(team),teamNumber+1)
-
-
-    print(teamDict)
-    # assign teams to groups according to seed
+# if __name__ == '__main__':
