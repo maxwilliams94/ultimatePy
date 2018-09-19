@@ -1,16 +1,16 @@
 from ultimatepy import Team,Group
 
 # import team list
-teamList = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
+all_teams = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
 # count number of teams
-numTeams = len(teamList)
+numTeams = len(all_teams)
 # get number of groups
-numGroups = int(len(teamList)/4)
+numGroups = int(len(all_teams)/4)
 print("{} Groups of 4 Teams".format(numGroups))
 
 # Populate TeamDict with Team objects
 teamDict = {}
-for teamNumber,team in enumerate(teamList):
+for teamNumber,team in enumerate(all_teams):
     teamDict[str(team)] = Team(str(team),teamNumber+1)
 
 
@@ -23,8 +23,15 @@ for number in range(0,numGroups):
     groupList.append(group_name)
 
 # Create team_list dummy
-teamListDummy = teamList
+teamListDummy = all_teams
 # Iterate through the team list and assign each team to a group according to seed
-for num in range(len(teamList)):
+for num in range(int(len(all_teams)/2)):
     dest_group = groupList[num%len(groupList)]
-    # print(dest_group)
+    groupDict[dest_group].addTeam(teamListDummy.pop(0))
+    groupDict[dest_group].addTeam(teamListDummy.pop(-1))
+    groupDict[dest_group].team_list.sort()
+
+for group in groupList:
+    print(group)
+    for team in groupDict[group].team_list:
+        print(teamDict[team])
