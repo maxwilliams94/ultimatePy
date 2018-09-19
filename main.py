@@ -25,3 +25,6 @@ for number in range(0,numGroups):
 # Create team_list dummy
 teamListDummy = teamList
 # Iterate through the team list and assign each team to a group according to seed
+for num in range(len(teamList)):
+    dest_group = groupList[num%len(groupList)]
+    # print(dest_group)
