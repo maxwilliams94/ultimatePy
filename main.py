@@ -4,9 +4,13 @@ from ultimatepy import Team,Group
 all_teams = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
 # create dictionary of seeds
 seed_dict = {}
+# create dictionary to link seeds to teams in opposite direction
+rev_seed_dict = {}
+# populate seed and reverse seed dicts
 for seed,team in enumerate(all_teams):
     seed_dict[team] = seed + 1
-print((seed_dict.items()))
+    rev_seed_dict[seed + 1] = team
+
 # count number of teams
 total_teams = len(all_teams)
 # get number of groups

@@ -20,7 +20,7 @@ class Group:
 
     def refreshGroup(self):
         self.size = len(self.team_list)
-        self.team_list.sort()
+
 
 
 
