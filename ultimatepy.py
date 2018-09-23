@@ -18,8 +18,11 @@ class Group:
     def addTeam(self,team_name):
         self.team_list.append(str(team_name))
 
-    def UpdateSize(self):
+    def refreshGroup(self):
         self.size = len(self.team_list)
+        self.team_list.sort()
+
+
 
 
 # if __name__ == '__main__':

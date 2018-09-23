@@ -29,7 +29,11 @@ for num in range(len(all_teams)//2):
     dest_group = group_list[num % len(group_list)]
     group_dict[dest_group].addTeam(team_list_cp.pop(0))
     group_dict[dest_group].addTeam(team_list_cp.pop(-1))
-    group_dict[dest_group].team_list.sort()
+
+
+# Sort and set the group size attribute once all team lists are populated
+for group in group_dict.values():
+    group.refreshGroup()
 
 for group in group_list:
     print(group)
