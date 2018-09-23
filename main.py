@@ -25,7 +25,7 @@ for number in range(0, total_groups):
 # Create team_list dummy
 team_list_cp = all_teams
 # Iterate through the team list and assign each team to a group according to seed
-for num in range(int(len(all_teams)/2)):
+for num in range(len(all_teams)//2):
     dest_group = group_list[num % len(group_list)]
     group_dict[dest_group].addTeam(team_list_cp.pop(0))
     group_dict[dest_group].addTeam(team_list_cp.pop(-1))
