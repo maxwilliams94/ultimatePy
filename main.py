@@ -18,7 +18,7 @@ for team_num, team in enumerate(all_teams):
 group_dict = {}
 group_list = []
 for number in range(0, total_groups):
-    group_name = chr(65 + number)
+    group_name = chr(ord('A') + number)
     group_dict[group_name] = Group(group_name)
     group_list.append(group_name)
 
