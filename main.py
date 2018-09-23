@@ -42,7 +42,7 @@ for num in range(len(all_teams)//2):
 
 # Sort and set the group size attribute once all team lists are populated
 for group in group_dict.values():
-    group.refreshGroup()
+    group.refreshGroup(seed_dict,rev_seed_dict)
 
 for group in group_list:
     print(group)
