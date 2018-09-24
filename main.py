@@ -1,4 +1,5 @@
 from ultimatepy import Team,Group
+import datetime
 
 # import team list
 all_teams = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
@@ -48,3 +49,12 @@ for group in group_list:
     print(group)
     for team in group_dict[group].team_list:
         print(team_dict[team])
+
+# Game/Day variables
+game_length   = 60
+game_break    = 5
+total_pitches = 2
+length_of_day = 8 * 60
+day_start     = datetime.time(9,0,0,0)
+
+
