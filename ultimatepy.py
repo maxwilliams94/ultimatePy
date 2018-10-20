@@ -31,6 +31,22 @@ class Group:
         self.team_list = temp_team_list
 
 
+class Pitch:
+    def __init__(self, identifier):
+        self.id = identifier
+        self.fixtures = []
+
+
+class Fixture:
+    def __init__(self, team1, team2, pitch, gamestart, gamelength):
+        self.team1 = team1
+        self.team2 = team2
+        self.pitch = pitch
+        self.gamestart = gamestart
+        self.gamelength = gamelength
+
+
+
 
 
 
