@@ -1,5 +1,6 @@
-from ultimatepy import Team,Group
+from ultimatepy import Team, Group, Pitch, Fixture
 import datetime
+from math import floor
 
 # import team list
 all_teams = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H"]
@@ -51,9 +52,31 @@ for group in group_list:
         print(team_dict[team])
 
 # Game/Day variables
-game_length   = 60
-game_break    = 5
-total_pitches = 2
-day_start = datetime.datetime(datetime.datetime.now().year, 1, 1, 9, 0, 0, 0)
-day_end = datetime.datetime(datetime.datetime.now().year, 1, 1, 17, 0, 0, 0)
-length_of_day = day_end - day_start
+game_length = datetime.timedelta(0, 0, 0, 0, 60, 0, 0)
+game_break = datetime.timedelta(0, 0, 0, 0, 5, 0, 0)
+days = 2
+total_pitches = 3
+day1_start = datetime.datetime(datetime.datetime.now().year, 1, 1, 9, 0, 0, 0)
+day1_end = datetime.datetime(datetime.datetime.now().year, 1, 1, 17, 0, 0, 0)
+day2_start = datetime.datetime(datetime.datetime.now().year, 1, 1, 9, 0, 0, 0)
+day2_end = datetime.datetime(datetime.datetime.now().year, 1, 1, 15, 0, 0, 0)
+length_of_day1 = day1_end - day1_start
+length_of_day2 = day2_end - day2_start
+
+# Create pitch objects
+pitch_dict = {}
+for pitch in range(1, total_pitches + 1):
+    pitch_dict[str(pitch)] = Pitch(str(pitch))
+
+# Check number of time slots versus number of required games
+total_group_matches = 0
+for group in group_dict.values():
+    total_group_matches += group.size * (group.size - 1)
+print("\nTotal Group Matches: {}".format(total_group_matches))
+
+total_game_slots = floor((length_of_day1 + length_of_day2) / (game_length + game_break)) * total_pitches
+print("\n{} Pitches for {} days with {} games and {} breaks gives {} game slots".format(
+    total_pitches, days, game_length, game_break, total_game_slots))
+
+print("\n{} games required for full group stage, leaving {} left for bracket games".format(
+    total_group_matches, total_game_slots - total_group_matches))
