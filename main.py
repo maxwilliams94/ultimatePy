@@ -2,7 +2,7 @@ from ultimatepy import Team,Group
 import datetime
 
 # import team list
-all_teams = ["Uni A","Uni B", "Uni C", "Uni D", "Uni E", "Uni F", "Uni G", "Uni H"]
+all_teams = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H"]
 # create dictionary of seeds
 seed_dict = {}
 # create dictionary to link seeds to teams in opposite direction
@@ -54,7 +54,6 @@ for group in group_list:
 game_length   = 60
 game_break    = 5
 total_pitches = 2
-length_of_day = 8 * 60
-day_start     = datetime.time(9,0,0,0)
-
-
+day_start = datetime.datetime(datetime.datetime.now().year, 1, 1, 9, 0, 0, 0)
+day_end = datetime.datetime(datetime.datetime.now().year, 1, 1, 17, 0, 0, 0)
+length_of_day = day_end - day_start
