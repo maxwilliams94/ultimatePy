@@ -11,12 +11,13 @@ class Team:
         return '{}: {}'.format(self.seed,self.name)
 
 class Group:
-    def __init__(self, identifier):
+    def __init__(self, identifier, size):
         self.id = identifier
-        self.team_list = []
-        self.size = 0
-    def addTeam(self,team_name):
-        self.team_list.append(str(team_name))
+        self.team_list = []  # List of team objects
+        self.size = size
+
+    def addTeam(self, team):
+        self.team_list.append(team)
 
     def refreshGroup(self,seed_dictionary,rev_seed_dictionary):
         """Set group size and then sort self.team_list according to seeds"""
