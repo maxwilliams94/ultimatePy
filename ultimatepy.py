@@ -33,8 +33,10 @@ class Group:
 
     def __str__(self):
         self.team_list.sort(key=lambda e: e.seed)
+        team_str = ""
         for team in self.team_list:
-            return "".format(team)
+            team_str = team_str + "{}\n".format(team)
+        return team_str
 
 
 class Pitch:
