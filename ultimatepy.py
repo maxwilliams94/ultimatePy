@@ -34,8 +34,9 @@ class Group:
     def __str__(self):
         self.team_list.sort(key=lambda e: e.seed)
         team_str = ""
+        team_str += "Group {}\n{}\n".format(self.id, 7 * "-")
         for team in self.team_list:
-            team_str = team_str + "{}\n".format(team)
+            team_str += "{}\n".format(team)
         return team_str
 
 
