@@ -31,6 +31,11 @@ class Group:
             temp_team_list.append(rev_seed_dictionary[seed])
         self.team_list = temp_team_list
 
+    def __str__(self):
+        self.team_list.sort(key=lambda e: e.seed)
+        for team in self.team_list:
+            return "".format(team)
+
 
 class Pitch:
     def __init__(self, identifier):
