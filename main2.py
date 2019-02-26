@@ -33,3 +33,6 @@ for i in cycle(range(tot_grps)):
     except IndexError:
         # Run out of teams to place into groups
         break
+
+for i in range(tot_grps):
+    print(groups[i])
