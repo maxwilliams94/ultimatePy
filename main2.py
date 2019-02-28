@@ -1,7 +1,9 @@
+import collections
+
 from ultimatepy import Team, Group, Pitch
 from itertools import cycle
 from datetime import datetime, timedelta
-from math import floor
+
 
 # Expect team list to be input from file in seed order
 team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H"]
@@ -38,11 +40,11 @@ for i in range(tot_grps):
     print(groups[i])
 
 # Game/Day Variables
-game_length = timedelta(hours=1)
-game_gap = timedelta(minutes=5)
-total_pitches = 3
-day_start = datetime(datetime.now().year, month=1, day=1, hour=9)
-day_length = timedelta(hours=8)
+Timings = collections.namedtuple('Timings', ['game_length', 'game_break', 'day_start', 'day_length'])
+timings = Timings(timedelta(hours=1), timedelta(minutes=5), datetime(day=1, hour=9), day_length=timedelta(hours=8))
+total_pitches = 1
+
+
 
 # Create Pitch objects and store in dictionary
 pitches = {}
