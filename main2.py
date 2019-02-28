@@ -45,10 +45,9 @@ timings = Timings(timedelta(hours=1), timedelta(minutes=5), datetime(day=1, hour
 total_pitches = 1
 
 
-
 # Create Pitch objects and store in dictionary
 pitches = {}
 for id in range(total_pitches):
     pitches[id] = Pitch(id)
 
-#
+# todo Storage of teams, groups, fixtures, pitches etc (in their dictionaries) inside main or within a tournament class?

@@ -62,8 +62,4 @@ class Fixture:
         self.gamelength = gamelength
 
 
-
-
-
-
 # if __name__ == '__main__':
