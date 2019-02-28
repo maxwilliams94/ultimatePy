@@ -1,6 +1,6 @@
-from ultimatepy import Team, Group
+from ultimatepy import Team, Group, Pitch
 from itertools import cycle
-import datetime
+from datetime import datetime, timedelta
 from math import floor
 
 # Expect team list to be input from file in seed order
@@ -36,3 +36,17 @@ for i in cycle(range(tot_grps)):
 
 for i in range(tot_grps):
     print(groups[i])
+
+# Game/Day Variables
+game_length = timedelta(hours=1)
+game_gap = timedelta(minutes=5)
+total_pitches = 3
+day_start = datetime(datetime.now().year, month=1, day=1, hour=9)
+day_length = timedelta(hours=8)
+
+# Create Pitch objects and store in dictionary
+pitches = {}
+for id in range(total_pitches):
+    pitches[id] = Pitch(id)
+
+#
