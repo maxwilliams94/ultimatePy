@@ -9,7 +9,7 @@ team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G",
 # Dictionary of Team objects
 teams = {}
 for pos, team in enumerate(team_input):
-    teams[pos + 1] = Team(team, pos)
+    teams[pos + 1] = Team(team, pos + 1)
 
 tot_teams = len(team_input)
 grp_size = 4

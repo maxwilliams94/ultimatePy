@@ -7,6 +7,7 @@ class Team:
         self.group = ""
         self.groupSeed = -1
         self.grp_pos = 0
+        self.id = seed
 
     def __repr__(self):
         return '{}: {}'.format(self.seed,self.name)
