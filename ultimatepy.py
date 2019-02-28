@@ -6,6 +6,7 @@ class Team:
         self.seed = seed
         self.group = ""
         self.groupSeed = -1
+        self.grp_pos = 0
 
     def __repr__(self):
         return '{}: {}'.format(self.seed,self.name)
@@ -15,9 +16,12 @@ class Group:
         self.id = identifier
         self.team_list = []  # List of team objects
         self.size = size
+        self.seed_list = []
 
     def addTeam(self, team):
         self.team_list.append(team)
+        self.seed_list.append(team.seed)
+        self.seed_list.sort()
 
     def refreshGroup(self,seed_dictionary,rev_seed_dictionary):
         """Set group size and then sort self.team_list according to seeds"""
