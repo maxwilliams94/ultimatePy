@@ -1,4 +1,48 @@
+from itertools import cycle
 
+import collections
+
+
+class Tournament:
+    """
+    Store (and initialise) dictionary and storage structures
+    """
+
+    def __init__(self, team_list, timings, total_pitches):
+        # Dictionary of Team objects
+        self.timings = timings
+        self.total_pitches = total_pitches
+
+        self.teams = {}
+        for pos, team in enumerate(team_list):
+            self.teams[pos + 1] = Team(team, pos + 1)
+            self.tot_teams = len(team_list)
+
+        grp_size = 4
+        self.tot_grps = self.tot_teams // grp_size
+
+        print("{} groups of 4 teams".format(self.tot_grps))
+
+        # Create group objects within dictionary
+        self.groups = {}
+        for i in range(self.tot_grps):
+            self.groups[i] = Group(chr(ord('A') + i), grp_size)
+
+        # Assign teams in initial self.groups by seed
+        temp_seed_list = list(range(1, self.tot_teams + 1))
+        for i in cycle(range(self.tot_grps)):
+            try:
+                team = self.teams[temp_seed_list.pop(0)]
+                self.groups[i].addTeam(team)
+                team = self.teams[temp_seed_list.pop(-1)]
+                self.groups[i].addTeam(team)
+            except IndexError:
+                # Run out of teams to place into self.groups
+                break
+
+        self.pitches = {}
+        for id in range(total_pitches):
+            self.pitches[id] = Pitch(id)
 
 class Team:
     def __init__(self, name, seed):
@@ -60,6 +104,9 @@ class Fixture:
         self.pitch = pitch
         self.gamestart = gamestart
         self.gamelength = gamelength
+
+
+Timings = collections.namedtuple('Timings', ['game_length', 'game_break', 'day_start', 'day_length'])
 
 
 # if __name__ == '__main__':
