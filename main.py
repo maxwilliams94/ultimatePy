@@ -1,6 +1,6 @@
 import collections
 
-from ultimatepy import Tournament, Team, Group, Pitch, Timings
+from ultimatepy import Tournament, Timings
 from itertools import cycle
 from datetime import datetime, timedelta
 
