@@ -6,6 +6,8 @@ import collections
 class Tournament:
     """
     Store (and initialise) dictionary and storage structures
+    Contains dictionaries for teams, groups, pitches which in turn
+    contain values which are Team, Group and Pitch object respectively.
     """
 
     def __init__(self, team_list, timings, total_pitches):
