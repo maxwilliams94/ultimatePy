@@ -1,6 +1,6 @@
 import collections
 
-from ultimatepy import Tournament, Timings
+from ultimatepy import Tournament, Timings, Fixture
 from itertools import cycle
 from datetime import datetime, timedelta
 
@@ -20,8 +20,21 @@ tournament = Tournament(team_input, timings, total_pitches)
 for i in range(tournament.tot_grps):
     print(tournament.groups[i])
 
+for group in tournament.groups.keys():
+    tournament.groups[group].refreshGroup()
+    print(tournament.groups[group])
+
+    print(tournament.groups[i])
+
+tournament.create_group_stage()
+print("Created Group Stage")
+for ob in tournament.schedule:
+    print(ob)
+
+
 # todos
-# todo Create schedule (group stage)
+# todo Tournament _init_ needs to be more transparent, not a hidden method with non obvious effects
+# todo Create schedule/list of fixture objects
 # todo Add schedules to pitches
 # todo allow data input for match results
 # todo create storage for group results

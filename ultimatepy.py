@@ -1,7 +1,19 @@
-from itertools import cycle
+from itertools import cycle, product
 
 import collections
 
+
+def create_group_match_ups(group_size):
+    match_ups = []
+    team_ones = list(range(0,group_size))
+    team_twos = list(range(0,group_size))
+    for t1 in team_ones:
+        for t2 in team_twos:
+            if t1 != t2: match_ups.append((t1,t2))
+
+        team_twos.pop(team_twos.index(t1))
+
+    return match_ups
 
 class Tournament:
     """
@@ -20,15 +32,15 @@ class Tournament:
             self.teams[pos + 1] = Team(team, pos + 1)
             self.tot_teams = len(team_list)
 
-        grp_size = 4
-        self.tot_grps = self.tot_teams // grp_size
+        self.group_size = 4
+        self.tot_grps = self.tot_teams // self.group_size
 
         print("{} groups of 4 teams".format(self.tot_grps))
 
         # Create group objects within dictionary
         self.groups = {}
         for i in range(self.tot_grps):
-            self.groups[i] = Group(chr(ord('A') + i), grp_size)
+            self.groups[i] = Group(chr(ord('A') + i), self.group_size)
 
         # Assign teams in initial self.groups by seed
         temp_seed_list = list(range(1, self.tot_teams + 1))
@@ -46,6 +58,47 @@ class Tournament:
         for id in range(total_pitches):
             self.pitches[id] = Pitch(id)
 
+        self.schedule = [] # list of Fixture objects
+
+    def create_group_stage(self):
+        req_group_games = self.tot_grps * (self.group_size * (self.group_size - 1))//2
+        print("Total group games: {}".format(req_group_games))
+
+        # For each group, as many games from the same group should play at the same time
+        max_concur_games = self.group_size//2
+        if max_concur_games > self.total_pitches: max_concur_games = self.total_pitches
+
+        group_game_combinations = {}
+        for group in self.groups.keys():
+            group_game_combinations[group] = iter(cycle(create_group_match_ups(self.group_size)))
+
+        t1_last = t2_last = group_last = 99
+        group_games_created = 0
+        group_it = cycle(self.groups.keys())
+        pitch_it = cycle(self.pitches.keys())
+        group = next(group_it)
+        pitch = next(pitch_it)
+        i = 0
+        while group_games_created <= req_group_games:
+            t1,t2 = next(group_game_combinations[group])
+            if (t1 not in [t1_last, t2_last] and t2 not in [t1_last, t2_last]) or group != group_last:
+                self.schedule.append(
+                    Fixture(self.groups[group].team_list[t1],
+                            self.groups[group].team_list[t2],
+                            pitch,
+                            None,
+                            None,
+                            self.groups[group]))
+                t1_last,t2_last, group_last = t1, t2, group
+                group_games_created += 1
+                pitch = next(pitch_it)
+                i = i+1
+                if i == max_concur_games:
+                    group = next(group_it)
+                    i = 0
+        print("Created {} group stage games".format(group_games_created-1))
+
+
 class Team:
     def __init__(self, name, seed):
         self.name = name
@@ -57,8 +110,8 @@ class Team:
         self.goal_diff = 0
         self.group_points = 0
 
-    def __repr__(self):
-        return '{}: {}'.format(self.seed,self.name)
+    def __str__(self):
+        return self.name
 
 class Group:
     def __init__(self, identifier, size):
@@ -72,17 +125,10 @@ class Group:
         self.seed_list.append(team.seed)
         self.seed_list.sort()
 
-    def refreshGroup(self,seed_dictionary,rev_seed_dictionary):
+    def refreshGroup(self):
         """Set group size and then sort self.team_list according to seeds"""
         self.size = len(self.team_list)
-        group_seeds = []
-        for team in self.team_list:
-            group_seeds.append(seed_dictionary[team])
-        group_seeds.sort()
-        temp_team_list = []
-        for seed in group_seeds:
-            temp_team_list.append(rev_seed_dictionary[seed])
-        self.team_list = temp_team_list
+        self.team_list.sort(key=lambda e : e.seed)
 
     def __str__(self):
         self.team_list.sort(key=lambda e: e.seed)
@@ -100,12 +146,17 @@ class Pitch:
 
 
 class Fixture:
-    def __init__(self, team1, team2, pitch, gamestart, gamelength):
+    def __init__(self, team1, team2, pitch, gamestart, gamelength, group = None):
         self.team1 = team1
         self.team2 = team2
         self.pitch = pitch
+        self.group = group
         self.gamestart = gamestart
         self.gamelength = gamelength
+
+    def __str__(self):
+        return "{} | pitch {:3} | group {:3} |{:<10} v {:>10}".format(
+            self.gamestart, self.pitch, self.group.id,self.team1.name, self.team2.name)
 
 
 Timings = collections.namedtuple('Timings', ['game_length', 'game_break', 'day_start', 'day_length'])
