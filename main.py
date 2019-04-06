@@ -23,8 +23,8 @@ for group in tournament.groups.values():
 
 tournament.create_group_stage()
 print("Created Group Stage")
-for ob in tournament.schedule:
-    print(ob)
+for i,ob in enumerate(tournament.schedule):
+    print(i,ob)
 
 
 # todos

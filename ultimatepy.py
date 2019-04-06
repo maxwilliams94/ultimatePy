@@ -80,7 +80,7 @@ class Tournament:
         group = next(group_it)
         pitch = next(pitch_it)
         i = 0
-        while group_games_created <= req_group_games:
+        while group_games_created < req_group_games:
             t1,t2 = next(group_game_combinations[group])
             if (t1 not in [t1_last, t2_last] and t2 not in [t1_last, t2_last]) or group != group_last:
                 self.schedule.append(
@@ -97,7 +97,7 @@ class Tournament:
                 if i == max_concur_games:
                     group = next(group_it)
                     i = 0
-        print("Created {} group stage games".format(group_games_created-1))
+        print("Created {} group stage games".format(group_games_created))
 
 
 class Team:
