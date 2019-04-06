@@ -29,7 +29,6 @@ for i,ob in enumerate(tournament.schedule):
 
 # todos
 # todo Tournament _init_ needs to be more transparent, not a hidden method with non obvious effects
-# todo Create schedule/list of fixture objects
-# todo Add schedules to pitches
+# todo schedule needs timings adding following group stage creation
 # todo allow data input for match results
 # todo create storage for group results
