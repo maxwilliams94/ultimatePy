@@ -1,7 +1,4 @@
-import collections
-
-from ultimatepy import Tournament, Timings, Fixture
-from itertools import cycle
+from ultimatepy import Tournament, Timings
 from datetime import datetime, timedelta
 
 
@@ -23,8 +20,8 @@ for group in tournament.groups.values():
 
 tournament.create_group_stage()
 print("Created Group Stage")
-for i,ob in enumerate(tournament.schedule):
-    print(i,ob)
+for i, ob in enumerate(tournament.schedule):
+    print(i, ob)
 
 
 # todos
