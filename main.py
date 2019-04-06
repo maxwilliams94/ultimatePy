@@ -17,10 +17,9 @@ total_pitches = 1
 
 tournament = Tournament(team_input, timings, total_pitches)
 
-for group in tournament.groups.keys():
-    tournament.groups[group].refreshGroup()
-    print(tournament.groups[group])
-
+for group in tournament.groups.values():
+    group.refreshGroup()
+    print(group)
 
 tournament.create_group_stage()
 print("Created Group Stage")
