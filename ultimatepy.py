@@ -22,10 +22,11 @@ class Tournament:
     contain values which are Team, Group and Pitch object respectively.
     """
 
-    def __init__(self, team_list, timings, total_pitches):
+    def __init__(self, team_list, timings, total_pitches, group_size):
         # Dictionary of Team objects
         self.timings = timings
         self.total_pitches = total_pitches
+        self.group_size = group_size
 
         self.teams = {}
         for pos, team in enumerate(team_list):
@@ -33,18 +34,18 @@ class Tournament:
             self.tot_teams = len(team_list)
 
         self.group_size = 4
-        self.tot_grps = self.tot_teams // self.group_size
+        self.total_groups = self.tot_teams // self.group_size
 
-        print("{} groups of 4 teams".format(self.tot_grps))
+        print("{} groups of 4 teams".format(self.total_groups))
 
         # Create group objects within dictionary
         self.groups = {}
-        for i in range(self.tot_grps):
+        for i in range(self.total_groups):
             self.groups[i] = Group(chr(ord('A') + i), self.group_size)
 
         # Assign teams in initial self.groups by seed
         temp_seed_list = list(range(1, self.tot_teams + 1))
-        for i in cycle(range(self.tot_grps)):
+        for i in cycle(range(self.total_groups)):
             try:
                 team = self.teams[temp_seed_list.pop(0)]
                 self.groups[i].addTeam(team)
@@ -61,7 +62,7 @@ class Tournament:
         self.schedule = [] # list of Fixture objects
 
     def create_group_stage(self):
-        req_group_games = self.tot_grps * (self.group_size * (self.group_size - 1))//2
+        req_group_games = self.total_groups * (self.group_size * (self.group_size - 1))//2
         print("Total group games: {}".format(req_group_games))
 
         # For each group, as many games from the same group should play at the same time

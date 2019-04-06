@@ -15,7 +15,7 @@ timings = Timings(game_length=timedelta(hours=1),
                   day_length=timedelta(hours=8))
 total_pitches = 1
 
-tournament = Tournament(team_input, timings, total_pitches)
+tournament = Tournament(team_input, timings, total_pitches, group_size=4)
 
 for group in tournament.groups.values():
     group.refreshGroup()
