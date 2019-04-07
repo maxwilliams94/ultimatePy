@@ -11,7 +11,9 @@ timings = Timings(game_length=timedelta(hours=1),
                   day_start=datetime(year=1, month=1, day=1, hour=9),
                   day_length=timedelta(hours=8))
 
-t = Tournament(team_list=team_input, timings=timings, total_pitches=1, group_size=4)
+t = Tournament(team_list=team_input)
+t.create_groups(group_size=4)
+t.create_pitches(total_pitches=1)
 
 assert t.tot_teams == len(team_input), "total teams matches length of input team list"
 assert len(t.groups) == len(team_input)//t.group_size, "correct number of groups created"

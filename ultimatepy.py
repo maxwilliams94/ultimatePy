@@ -22,24 +22,32 @@ class Tournament:
     contain values which are Team, Group and Pitch object respectively.
     """
 
-    def __init__(self, team_list, timings, total_pitches, group_size):
-        # Dictionary of Team objects
-        self.timings = timings
-        self.total_pitches = total_pitches
-        self.group_size = group_size
-
+    def __init__(self, team_list):
+        self.groups = {}
         self.teams = {}
+        self.pitches = {}
+        self.schedule = []
+
+        self.group_size = 0
+        self.total_groups = 0
+        self.total_teams = 0
+        self.total_pitches = 0
+
+        # Populate teams with Team objects
+        # todo key in teams should be 0-indexed
         for pos, team in enumerate(team_list):
             self.teams[pos + 1] = Team(team, pos + 1)
-            self.tot_teams = len(team_list)
 
-        self.group_size = 4
+        self.tot_teams = len(team_list)
+
+
+    def create_groups(self, group_size):
+        self.group_size = group_size
         self.total_groups = self.tot_teams // self.group_size
 
-        print("{} groups of 4 teams".format(self.total_groups))
+        print("{} groups of {} teams".format(self.total_groups, group_size))
 
         # Create group objects within dictionary
-        self.groups = {}
         for i in range(self.total_groups):
             self.groups[i] = Group(chr(ord('A') + i), self.group_size)
 
@@ -55,11 +63,12 @@ class Tournament:
                 # Run out of teams to place into self.groups
                 break
 
-        self.pitches = {}
+    def create_pitches(self, total_pitches):
+        self.total_pitches = total_pitches
+
         for id in range(total_pitches):
             self.pitches[id] = Pitch(id)
 
-        self.schedule = [] # list of Fixture objects
 
     def create_group_stage(self):
         req_group_games = self.total_groups * (self.group_size * (self.group_size - 1))//2

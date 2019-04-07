@@ -12,7 +12,9 @@ timings = Timings(game_length=timedelta(hours=1),
                   day_length=timedelta(hours=8))
 total_pitches = 1
 
-tournament = Tournament(team_input, timings, total_pitches, group_size=4)
+tournament = Tournament(team_input)
+tournament.create_groups(group_size= 4)
+tournament.create_pitches(total_pitches=total_pitches)
 
 for group in tournament.groups.values():
     group.refreshGroup()
@@ -25,7 +27,6 @@ for i, ob in enumerate(tournament.schedule):
 
 
 # todos
-# todo Tournament _init_ needs to be more transparent, not a hidden method with non obvious effects
 # todo schedule needs timings adding following group stage creation
 # todo allow data input for match results
 # todo create storage for group results
