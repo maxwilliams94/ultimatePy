@@ -34,7 +34,6 @@ class Tournament:
         self.total_pitches = 0
 
         # Populate teams with Team objects
-        # todo key in teams should be 0-indexed
         for pos, team in enumerate(team_list):
             self.teams[pos + 1] = Team(team, pos + 1)
 
