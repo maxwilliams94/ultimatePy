@@ -10,9 +10,9 @@ timings = Timings(group_game_length=timedelta(minutes=50),
                   game_length=timedelta(hours=1),
                   game_break=timedelta(minutes=5),
                   day1_start=datetime(year=1, month=1, day=1, hour=9),
-                  day2_start=datetime(year=1, month=1, day=1, hour=9),
-                  day1_length=timedelta(hours=8),
-                  day2_length=timedelta(hours=8))
+                  day2_start=datetime(year=1, month=1, day=2, hour=9),
+                  day1_end=datetime(year=1, month=1, day=1, hour = 17),
+                  day2_end=datetime(year=1, month=1, day=2, hour = 17))
 total_pitches = 1
 
 tournament = Tournament(team_input)

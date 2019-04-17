@@ -128,7 +128,6 @@ class Tournament:
                 game_length = self.timings.group_game_length
             else:
                 game_length = self.timings.game_length
-
             if fixture.game_start == None:
                 fixture.game_start = current_time[fixture.pitch]
                 fixture.game_length = game_length
@@ -203,8 +202,8 @@ Timings = collections.namedtuple('Timings', ['group_game_length',
                                              'game_break',
                                              'day1_start',
                                              'day2_start',
-                                             'day1_length',
-                                             'day2_length'])
+                                             'day1_end',
+                                             'day2_end'])
 
 
 # if __name__ == '__main__':
