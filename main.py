@@ -36,3 +36,4 @@ for i, ob in enumerate(tournament.schedule):
 # todo schedule needs timings adding following group stage creation
 # todo allow data input for match results
 # todo create storage for group results
+# todo printed schedule should show team seeds and group position

@@ -49,6 +49,8 @@ class Tournament:
 
         print("{} groups of {} teams".format(self.total_groups, group_size))
 
+        self.req_group_games = self.total_groups * (self.group_size * (self.group_size - 1))//2
+        print("Total group games: {}".format(self.req_group_games))
         # Create group objects within dictionary
         for i in range(self.total_groups):
             self.groups[i] = Group(chr(ord('A') + i), self.group_size)
@@ -76,10 +78,28 @@ class Tournament:
     def set_timings(self, timings):
         self.timings = timings
 
+        length_day1 = self.timings.day1_end - self.timings.day1_start
+        length_day2 = self.timings.day2_end - self.timings.day2_start
+        available_time = length_day1+length_day2
+        adj_group_game_length = self.timings.group_game_length + self.timings.game_break
+        adj_game_length = self.timings.game_length + self.timings.game_break
+        self.max_placement_game_slots = self.total_pitches * (available_time -
+                                         adj_group_game_length * self.req_group_games
+                                         )//adj_game_length
+        total_group_game_time = self.req_group_games * adj_group_game_length
+        print("Total Tournament Time: {}".format(available_time))
+        if total_group_game_time/available_time > 0.6:
+            print("{} group games lasting {} ({}% of available time!)".format(self.req_group_games,
+                                                     total_group_game_time,
+                  100*total_group_game_time/available_time))
+        if self.max_placement_game_slots < self.total_teams:
+            print("Only {} game slots available for placement games!".format(self.max_placement_game_slots))
+            print("Consider lengthening tournament hours, adding more pitches or removing teams")
+
+
 
     def create_group_stage(self):
-        req_group_games = self.total_groups * (self.group_size * (self.group_size - 1))//2
-        print("Total group games: {}".format(req_group_games))
+
 
         # For each group, as many games from the same group should play at the same time
         max_concur_games = self.group_size//2
@@ -96,7 +116,7 @@ class Tournament:
         group = next(group_it)
         pitch = next(pitch_it)
         i = 0
-        while group_games_created < req_group_games:
+        while group_games_created < self.req_group_games:
             t1,t2 = next(group_game_combinations[group])
             if (t1 not in [t1_last, t2_last] and t2 not in [t1_last, t2_last]) or group != group_last:
                 self.schedule.append(
