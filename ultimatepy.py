@@ -128,6 +128,10 @@ class Tournament:
                 game_length = self.timings.group_game_length
             else:
                 game_length = self.timings.game_length
+            # Move to 'next day' if required
+            if self.timings.day2_start > current_time[fixture.pitch] > self.timings.day1_end:
+                current_time[fixture.pitch] = self.timings.day2_start
+
             if fixture.game_start == None:
                 fixture.game_start = current_time[fixture.pitch]
                 fixture.game_length = game_length
