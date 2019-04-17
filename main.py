@@ -6,24 +6,30 @@ from datetime import datetime, timedelta
 team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H"]
 # Tournament timings stored within namedTuple
 # Game/Day Variables
-timings = Timings(game_length=timedelta(hours=1),
+timings = Timings(group_game_length=timedelta(minutes=50),
+                  game_length=timedelta(hours=1),
                   game_break=timedelta(minutes=5),
-                  day_start=datetime(year=1, month=1, day=1, hour=9),
-                  day_length=timedelta(hours=8))
+                  day1_start=datetime(year=1, month=1, day=1, hour=9),
+                  day2_start=datetime(year=1, month=1, day=1, hour=9),
+                  day1_length=timedelta(hours=8),
+                  day2_length=timedelta(hours=8))
 total_pitches = 1
 
 tournament = Tournament(team_input)
 tournament.create_groups(group_size= 4)
 tournament.create_pitches(total_pitches=total_pitches)
+tournament.set_timings(timings)
 
 for group in tournament.groups.values():
     group.refreshGroup()
     print(group)
 
 tournament.create_group_stage()
-print("Created Group Stage")
+
+tournament.assign_timings_to_schedule()
+print("Assign Timings to Schedule")
 for i, ob in enumerate(tournament.schedule):
-    print(i, ob)
+    print("{:4} {}".format(i+1, ob))
 
 
 # todos

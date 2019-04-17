@@ -1,6 +1,6 @@
-from itertools import cycle, product
-
+from itertools import cycle
 import collections
+import datetime
 
 
 def create_group_match_ups(group_size):
@@ -33,16 +33,19 @@ class Tournament:
         self.total_teams = 0
         self.total_pitches = 0
 
+        #Timings
+        self.timings = Timings
+
         # Populate teams with Team objects
         for pos, team in enumerate(team_list):
             self.teams[pos + 1] = Team(team, pos + 1)
 
-        self.tot_teams = len(team_list)
+        self.total_teams = len(team_list)
 
 
     def create_groups(self, group_size):
         self.group_size = group_size
-        self.total_groups = self.tot_teams // self.group_size
+        self.total_groups = self.total_teams // self.group_size
 
         print("{} groups of {} teams".format(self.total_groups, group_size))
 
@@ -51,7 +54,7 @@ class Tournament:
             self.groups[i] = Group(chr(ord('A') + i), self.group_size)
 
         # Assign teams in initial self.groups by seed
-        temp_seed_list = list(range(1, self.tot_teams + 1))
+        temp_seed_list = list(range(1, self.total_teams + 1))
         for i in cycle(range(self.total_groups)):
             try:
                 team = self.teams[temp_seed_list.pop(0)]
@@ -62,11 +65,16 @@ class Tournament:
                 # Run out of teams to place into self.groups
                 break
 
+
     def create_pitches(self, total_pitches):
         self.total_pitches = total_pitches
 
         for id in range(total_pitches):
             self.pitches[id] = Pitch(id)
+
+
+    def set_timings(self, timings):
+        self.timings = timings
 
 
     def create_group_stage(self):
@@ -106,6 +114,28 @@ class Tournament:
                     group = next(group_it)
                     i = 0
         print("Created {} group stage games".format(group_games_created))
+
+    def assign_timings_to_schedule(self):
+        """
+        Iterate through schedule, assigning timings to the fixture list
+        """
+        # Iterate over schedule items and iterate timings
+        current_time = {}
+        for pitch in self.pitches.keys():
+            current_time[pitch] = self.timings.day1_start
+        for fixture in self.schedule:
+            if fixture.group != None:
+                game_length = self.timings.group_game_length
+            else:
+                game_length = self.timings.game_length
+
+            if fixture.game_start == None:
+                fixture.game_start = current_time[fixture.pitch]
+                fixture.game_length = game_length
+                current_time[fixture.pitch] += game_length + self.timings.game_break
+            else:
+                # Fixture already has a time assigned, skip
+                current_time[fixture.pitch] += (fixture.game_length + self.timings.game_break)
 
 
 class Team:
@@ -155,20 +185,26 @@ class Pitch:
 
 
 class Fixture:
-    def __init__(self, team1, team2, pitch, gamestart, gamelength, group = None):
+    def __init__(self, team1, team2, pitch, game_start, game_length, group = None):
         self.team1 = team1
         self.team2 = team2
         self.pitch = pitch
         self.group = group
-        self.gamestart = gamestart
-        self.gamelength = gamelength
+        self.game_start = game_start
+        self.game_length = game_length
 
     def __str__(self):
         return "{} | pitch {:3} | group {:3} |{:<10} v {:>10}".format(
-            self.gamestart, self.pitch, self.group.id,self.team1.name, self.team2.name)
+            datetime.datetime.strftime(self.game_start,'%H:%M'), self.pitch, self.group.id,self.team1.name, self.team2.name)
 
 
-Timings = collections.namedtuple('Timings', ['game_length', 'game_break', 'day_start', 'day_length'])
+Timings = collections.namedtuple('Timings', ['group_game_length',
+                                             'game_length',
+                                             'game_break',
+                                             'day1_start',
+                                             'day2_start',
+                                             'day1_length',
+                                             'day2_length'])
 
 
 # if __name__ == '__main__':
