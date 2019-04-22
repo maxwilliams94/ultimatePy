@@ -36,6 +36,7 @@ tournament.print_schedule()
 
 
 # todos
+# todo increasing total pitches to 2 ruins group stage, such that some games are repeated
 # todo schedule needs timings adding following group stage creation
 # todo allow data input for match results
 # todo create storage for group results
