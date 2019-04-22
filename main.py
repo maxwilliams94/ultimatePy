@@ -29,8 +29,10 @@ tournament.create_group_stage()
 
 tournament.assign_timings_to_schedule()
 print("Assign Timings to Schedule")
-for i, ob in enumerate(tournament.schedule):
-    print("{:4} {}".format(i+1, ob))
+# for i, ob in enumerate(tournament.schedule):
+#     print("{:4} {}".format(i+1, ob))
+
+tournament.print_schedule()
 
 
 # todos

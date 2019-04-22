@@ -161,6 +161,37 @@ class Tournament:
                 current_time[fixture.pitch] += (fixture.game_length + self.timings.game_break)
 
 
+    def print_schedule(self):
+        """Output schedule in easy to read format"""
+        fixtures_by_pitch = []
+        for pitch in range(self.total_pitches):
+            fixtures_by_pitch.append([])
+        assert len(fixtures_by_pitch) == self.total_pitches, "incorrect fixtures_by_pitch initialisation"
+
+        for fixture in self.schedule:
+            fixtures_by_pitch[fixture.pitch-1].append(fixture)
+
+        # Find longest dimension list
+        longest_length = len(max(fixtures_by_pitch, key=lambda col: len(col)))
+        # Time for printing to screen
+        header = "{:<16}".format("Game Time")
+        for pitch in range(self.total_pitches):
+            header += "Pitch {:<20}".format(pitch)
+        print(header)
+        for i in range(longest_length):
+            fixture_info = []
+            fixture_info.append(" {} ".format(datetime.datetime.strftime(fixtures_by_pitch[0][i].game_start,'%d/%m %H:%M')))
+            for pitch in range(self.total_pitches):
+                fixture = fixtures_by_pitch[pitch][i]
+                try:
+                    fixture_info.append("{:10s} vs {:10s}".format(
+                        fixture.team1.name, fixture.team2.name))
+                except IndexError:
+                    fixture_info.append("({}) {} vs {} ({})".format(
+                        "-", "-", "-", "-"))
+
+            print(" | ".join(fixture_info))
+
 class Team:
     def __init__(self, name, seed):
         self.name = name
@@ -172,8 +203,8 @@ class Team:
         self.goal_diff = 0
         self.group_points = 0
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class Group:
     def __init__(self, identifier, size):
@@ -197,7 +228,7 @@ class Group:
         team_str = ""
         team_str += "Group {}\n{}\n".format(self.id, 7 * "-")
         for team in self.team_list:
-            team_str += "{}\n".format(team)
+            team_str += "{:<2} {}\n".format(team.seed, team.name)
         return team_str
 
 
