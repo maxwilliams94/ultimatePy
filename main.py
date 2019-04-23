@@ -14,11 +14,9 @@ timings = Timings(group_game_length=timedelta(minutes=50),
                   day1_end=datetime(year=1, month=1, day=1, hour = 17),
                   day2_end=datetime(year=1, month=1, day=2, hour = 17))
 
-total_pitches = 1
-
 tournament = Tournament(team_input)
-tournament.create_groups(group_size= 4)
-tournament.create_pitches(total_pitches=total_pitches)
+tournament.create_groups(group_size=4)
+tournament.create_pitches(total_pitches=2)
 tournament.set_timings(timings)
 
 for group in tournament.groups.values():

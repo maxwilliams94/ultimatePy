@@ -103,13 +103,21 @@ class Tournament:
 
         # For each group, as many games from the same group should play at the same time
         max_concur_games = self.group_size//2
-        if max_concur_games > self.total_pitches: max_concur_games = self.total_pitches
+        if max_concur_games > self.total_pitches:
+            max_concur_games = self.total_pitches
 
         group_game_combinations = {}
         for group in self.groups.keys():
             group_game_combinations[group] = iter(cycle(create_group_match_ups(self.group_size)))
+        t1_last = []
+        t2_last = []
+        group_last = []
+        for i in range(max_concur_games):
+            t1_last.append("a")
+            t2_last.append("a")
+            group_last.append("a")
 
-        t1_last = t2_last = group_last = 99
+
         group_games_created = 0
         group_it = cycle(self.groups.keys())
         pitch_it = cycle(self.pitches.keys())
@@ -118,7 +126,8 @@ class Tournament:
         i = 0
         while group_games_created < self.req_group_games:
             t1,t2 = next(group_game_combinations[group])
-            if (t1 not in [t1_last, t2_last] and t2 not in [t1_last, t2_last]) or group != group_last:
+            if self.check_last_teams_scheduled(t1, t2, group, t1_last, t2_last, group_last):
+                print(t1,t2,group,"|",t1_last,t2_last, "|", group_last)
                 self.schedule.append(
                     Fixture(self.groups[group].team_list[t1],
                             self.groups[group].team_list[t2],
@@ -126,7 +135,7 @@ class Tournament:
                             None,
                             None,
                             self.groups[group]))
-                t1_last,t2_last, group_last = t1, t2, group
+                t1_last[i],t2_last[i], group_last[i] = t1, t2, group
                 group_games_created += 1
                 pitch = next(pitch_it)
                 i = i+1
@@ -191,6 +200,15 @@ class Tournament:
                         "-", "-", "-", "-"))
 
             print(" | ".join(fixture_info))
+    @staticmethod
+    def check_last_teams_scheduled(team1, team2, group, team1_last, team2_last, group_last):
+
+        return ((team1 not in team1_last and
+                 team1 not in team2_last and
+                 team2 not in team1_last and
+                 team2 not in team2_last)
+                 or group not in group_last)
+
 
 class Team:
     def __init__(self, name, seed):
