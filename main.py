@@ -25,17 +25,15 @@ for group in tournament.groups.values():
 
 tournament.create_group_stage()
 
-tournament.assign_timings_to_schedule()
-print("Assign Timings to Schedule")
-# for i, ob in enumerate(tournament.schedule):
-#     print("{:4} {}".format(i+1, ob))
+# tournament.assign_timings_to_schedule()
+# print("Assign Timings to Schedule")
 
 tournament.print_schedule()
 
 
 # todos
-# todo increasing total pitches to 2 ruins group stage, such that some games are repeated
-# todo schedule needs timings adding following group stage creation
-# todo allow data input for match results
+# todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
+#  to be incremented etc
+# todo recreate str overides for classes. when a class needs to be printed within
+#  another class, print specific attributes of it instead of the entire class which will cause errors
 # todo create storage for group results
-# todo printed schedule should show team seeds and group position
