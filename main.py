@@ -34,6 +34,4 @@ tournament.print_schedule()
 # todos
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
 #  to be incremented etc
-# todo recreate str overides for classes. when a class needs to be printed within
-#  another class, print specific attributes of it instead of the entire class which will cause errors
 # todo create storage for group results

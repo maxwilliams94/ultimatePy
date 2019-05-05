@@ -300,8 +300,8 @@ class Team:
         self.goal_diff = 0
         self.group_points = 0
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return "{} {}".format(self.seed, self.name)
 
 class Group:
     def __init__(self, i, size):
