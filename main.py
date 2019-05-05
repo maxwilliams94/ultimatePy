@@ -16,7 +16,7 @@ timings = Timings(group_game_length=timedelta(minutes=50),
 
 tournament = Tournament(team_input)
 tournament.create_groups(group_size=4)
-tournament.create_pitches(total_pitches=2)
+tournament.create_pitches(total_pitches=3)
 tournament.set_timings(timings)
 
 for group in tournament.groups.values():
@@ -35,3 +35,4 @@ tournament.print_schedule()
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
 #  to be incremented etc
 # todo create storage for group results
+# todo ability to read in results from a csv file
