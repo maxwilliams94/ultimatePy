@@ -1,6 +1,7 @@
 from itertools import cycle
 import collections
 import datetime
+from copy import deepcopy
 
 
 def create_group_match_ups(group_size):
@@ -119,11 +120,12 @@ class Tournament:
             match_priority[group.index] = []
             match_up_indices = create_group_match_ups(self.group_size)
             for t1,t2 in match_up_indices:
-                match_ups[group.index].append(
-                    Fixture(group.team_list[t1],
-                            group.team_list[t2],
-                            -1, None, None, group.index)
-                )
+                match_ups[group.index].append(deepcopy(Fixture(group.team_list[t1],
+                                                               group.team_list[t2],
+                                                               -1,
+                                                               None,
+                                                               None,
+                                                               group.index)))
 
 
         group_cycle = cycle(iter(list(self.groups.keys())))
