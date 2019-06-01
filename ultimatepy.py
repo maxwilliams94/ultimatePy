@@ -194,6 +194,7 @@ class Tournament:
             exit(1)
 
         # Create dictonary of lists of level 1 bracket match ups
+        # todo dictionary creation should be in a method to avoid repetition for both group and bracket stages
         seed_combos = {}
         match_ups = {}
         for g in ['top', 'bottom']:

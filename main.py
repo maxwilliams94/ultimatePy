@@ -35,6 +35,7 @@ tournament.create_bracket()
 tournament.print_schedule()
 
 # todos
+# todo bracket stage completion
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
 #  to be incremented etc
 # todo create storage for group results
