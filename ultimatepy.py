@@ -94,7 +94,7 @@ class Tournament:
         self.max_placement_game_slots = self.total_pitches * (available_time -
                                          adj_group_game_length * self.req_group_games
                                          )//adj_game_length
-        total_group_game_time = self.req_group_games * adj_group_game_length
+        total_group_game_time = (self.req_group_games * adj_group_game_length) / self.total_pitches
         print("Total Tournament Time: {}".format(available_time))
         if total_group_game_time/available_time > 0.6:
             print("{} group games lasting {} ({}% of available time!)".format(self.req_group_games,
