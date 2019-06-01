@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 
 
 # Expect team list to be input from file in seed order
-team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H"]
+team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H", "Uni A 3", "Uni B 2",
+              "Uni C 2", "Uni D 2"]
 # Tournament timings stored within namedTuple
 # Game/Day Variables
 timings = Timings(group_game_length=timedelta(minutes=50),
@@ -28,8 +29,10 @@ tournament.create_group_stage()
 # tournament.assign_timings_to_schedule()
 # print("Assign Timings to Schedule")
 
-tournament.print_schedule()
 
+tournament.create_bracket()
+
+tournament.print_schedule()
 
 # todos
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
