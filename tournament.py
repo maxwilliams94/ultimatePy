@@ -1,9 +1,10 @@
+from groups import Group
+from teams import Team
 from itertools import cycle
-import collections
 import datetime
 from copy import deepcopy
 from sys import exit
-
+import collections
 
 def create_group_match_ups(group_size):
     """
@@ -94,14 +95,14 @@ class Tournament:
         adj_game_length = self.timings.game_length + self.timings.game_break
         self.max_placement_game_slots = self.total_pitches * (available_time -
                                                               adj_group_game_length * (
-                                                                          self.req_group_games // self.total_pitches)
+                                                                      self.req_group_games // self.total_pitches)
                                                               )//adj_game_length
         total_group_game_time = (self.req_group_games * adj_group_game_length) / self.total_pitches
         print("Total Tournament Time: {}".format(available_time))
         if total_group_game_time/available_time > 0.6:
             print("{} group games lasting {} ({}% of available time!)".format(self.req_group_games,
-                                                     total_group_game_time,
-                  100*total_group_game_time/available_time))
+                                                                              total_group_game_time,
+                                                                              100*total_group_game_time/available_time))
         if self.max_placement_game_slots < self.total_teams:
             print("Only {} game slots available for placement games!".format(self.max_placement_game_slots))
             print("Consider lengthening tournament hours, adding more pitches or removing teams")
@@ -310,7 +311,7 @@ class Tournament:
                 # lowest_games_played = min([t1_games_played, t2_games_played])
                 total_games_played = t1_games_played + t2_games_played
                 time_since_last_game = min([self.current_time_slot - t1_last_game_time,
-                                             self.current_time_slot - t2_last_game_time])
+                                            self.current_time_slot - t2_last_game_time])
 
                 priority = (24.0 - time_since_last_game.seconds/3600.0) + (10 - total_games_played)*10
                 if time_since_last_game < (min([self.timings.game_length, self.timings.group_game_length]) + self.timings.game_break):
@@ -339,47 +340,6 @@ class Tournament:
             current_time = self.timings.day2_end
 
         return current_time
-
-
-class Team:
-    def __init__(self, name, seed):
-        self.name = name
-        self.seed = seed
-        self.group = ""
-        self.groupSeed = -1
-        self.grp_pos = 0
-        self.id = seed
-        self.goal_diff = 0
-        self.group_points = 0
-
-    def __str__(self):
-        return "{} {}".format(self.seed, self.name)
-
-class Group:
-    def __init__(self, i, size):
-        self.id = chr(ord('A') + i)
-        self.index = i
-        self.team_list = []  # List of team objects
-        self.size = size
-        self.seed_list = []
-
-    def addTeam(self, team):
-        self.team_list.append(team)
-        self.seed_list.append(team.seed)
-        self.seed_list.sort()
-
-    def refreshGroup(self):
-        """Set group size and then sort self.team_list according to seeds"""
-        self.size = len(self.team_list)
-        self.team_list.sort(key=lambda e : e.seed)
-
-    def __str__(self):
-        self.team_list.sort(key=lambda e: e.seed)
-        team_str = ""
-        team_str += "Group {}\n{}\n".format(self.id, 7 * "-")
-        for team in self.team_list:
-            team_str += "{:<2} {}\n".format(team.seed, team.name)
-        return team_str
 
 
 class Pitch:
@@ -416,5 +376,3 @@ Timings = collections.namedtuple('Timings', ['group_game_length',
                                              'day1_end',
                                              'day2_end'])
 
-
-# if __name__ == '__main__':
