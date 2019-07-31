@@ -52,7 +52,7 @@ class Tournament:
         self.total_teams = len(team_list)
 
 
-    def create_groups(self, group_size):
+    def create_groups(self, group_size=4):
         self.group_size = group_size
         self.total_groups = self.total_teams // self.group_size
 
@@ -77,7 +77,7 @@ class Tournament:
                 break
 
 
-    def create_pitches(self, total_pitches):
+    def create_pitches(self, total_pitches=2):
         self.total_pitches = total_pitches
 
         for id in range(total_pitches):
