@@ -6,24 +6,8 @@ from copy import deepcopy
 from sys import exit
 import collections
 
-def get_group_match_up_indices(group_size):
-    """
-    Create a list of tuples for possible team1 and team2 index
-    combinations. When a team is chosen as t1, it is removed from t2
-    to stop double counting
-    :rtype: tuple array
-    :param group_size: number of teams in a group
-    """
-    match_ups = []
-    team_ones = list(range(0, group_size))
-    team_twos = list(range(0, group_size))
-    for t1 in team_ones:
-        for t2 in team_twos:
-            if t1 != t2: match_ups.append((t1, t2))
 
-        team_twos.pop(team_twos.index(t1))
 
-    return match_ups
 
 class Tournament:
     """
@@ -43,8 +27,13 @@ class Tournament:
         self.total_teams = 0
         self.total_pitches = 0
 
-        #Timings
+        self.max_placement_game_slots = 0
+        self.max_concurrent_games = 0
+        self.req_group_games = 0
+
+        # Timings
         self.timings = Timings
+        self.current_time_slot = datetime.datetime
 
         # Populate teams with Team objects
         for pos, team in enumerate(team_list):
@@ -52,14 +41,13 @@ class Tournament:
 
         self.total_teams = len(team_list)
 
-
     def create_groups(self, group_size=4):
         self.group_size = group_size
         self.total_groups = self.total_teams // self.group_size
 
         print("{} groups of {} teams".format(self.total_groups, group_size))
 
-        self.req_group_games = self.total_groups * (self.group_size * (self.group_size - 1))//2
+        self.req_group_games = self.total_groups * (self.group_size * (self.group_size - 1)) // 2
         print("Total group games: {}".format(self.req_group_games))
         # Create group objects within dictionary
         for i in range(self.total_groups):
@@ -77,38 +65,35 @@ class Tournament:
                 # Run out of teams to place into self.groups
                 break
 
-
     def create_pitches(self, total_pitches=2):
         self.total_pitches = total_pitches
 
         for id in range(total_pitches):
             self.pitches[id] = Pitch(id)
 
-
     def set_timings(self, timings):
         self.timings = timings
 
         length_day1 = self.timings.day1_end - self.timings.day1_start
         length_day2 = self.timings.day2_end - self.timings.day2_start
-        available_time = length_day1+length_day2
+        available_time = length_day1 + length_day2
         adj_group_game_length = self.timings.group_game_length + self.timings.game_break
         adj_game_length = self.timings.game_length + self.timings.game_break
         self.max_placement_game_slots = self.total_pitches * (available_time -
                                                               adj_group_game_length * (
                                                                       self.req_group_games // self.total_pitches)
-                                                              )//adj_game_length
+                                                              ) // adj_game_length
         total_group_game_time = (self.req_group_games * adj_group_game_length) / self.total_pitches
         print("Total Tournament Time: {}".format(available_time))
-        if total_group_game_time/available_time > 0.6:
+        if total_group_game_time / available_time > 0.6:
             print("{} group games lasting {} ({}% of available time!)".format(self.req_group_games,
                                                                               total_group_game_time,
-                                                                              100*total_group_game_time/available_time))
+                                                                              100 * total_group_game_time / available_time))
         if self.max_placement_game_slots < self.total_teams:
             print("Only {} game slots available for placement games!".format(self.max_placement_game_slots))
             print("Consider lengthening tournament hours, adding more pitches or removing teams")
 
         self.current_time_slot = self.timings.day1_start
-
 
     def create_group_stage(self):
         """
@@ -116,17 +101,35 @@ class Tournament:
         assign_fixtures_to_schedule()
             get_match_priority()
         """
-        self.max_concurrent_games = min([self.total_pitches, self.group_size//2])
+        self.max_concurrent_games = min([self.total_pitches, self.group_size // 2])
 
         # Create dictionary of group game match ups (as fixtures)
         match_ups = {}
-        match_priority = {}
         for group in self.groups.values():
-            match_priority[group.index] = []
-
             match_ups[group.index] = self.create_group_fixtures(group)
 
         self.assign_fixtures_to_schedule(cycle(iter(self.groups.keys())), match_ups, group_game=True)
+
+    @staticmethod
+    def get_group_match_up_indices(group_size):
+        """
+        Create a list of tuples for possible team1 and team2 index
+        combinations. When a team is chosen as t1, it is removed from t2
+        to stop double counting
+        :rtype: tuple array
+        :param group_size: number of teams in a group
+        """
+        match_ups = []
+        team_ones = list(range(0, group_size))
+        team_twos = list(range(0, group_size))
+        for t1 in team_ones:
+            for t2 in team_twos:
+                if t1 != t2:
+                    match_ups.append((t1, t2))
+
+            team_twos.pop(team_twos.index(t1))
+
+        return match_ups
 
     def assign_fixtures_to_schedule(self, groups, fixtures, group_game):
 
@@ -160,7 +163,6 @@ class Tournament:
             if pitch == 0:
                 # Pitch choice has has just cycled around: must move to next time slot
                 self.current_time_slot = self.increment_current_time(self.current_time_slot, group_game=group_game)
-                # print("Incremented Time P={} T={}".format(pitch, datetime.datetime.strftime(self.current_time_slot,'%H:%M')))
 
             # Increment group if max concurrent games has been reached
             if iconcurrent == self.max_concurrent_games:
@@ -181,10 +183,8 @@ class Tournament:
             else:
                 top_half -= 1
 
-        grouped_seeds = {}
+        grouped_seeds = {'top': list(range(1, top_half + 1)), 'bottom': list(range(top_half + 1, self.total_teams + 1))}
 
-        grouped_seeds['top'] = list(range(1, top_half + 1))
-        grouped_seeds['bottom'] = list(range(top_half + 1, self.total_teams + 1))
         if len(grouped_seeds['bottom']) % 2 != 0:
             print("Must have even number of teams in bottom half of bracket")
             print(len(grouped_seeds['bottom']))
@@ -237,7 +237,7 @@ class Tournament:
         for pitch in self.pitches.keys():
             current_time[pitch] = self.timings.day1_start
         for fixture in self.schedule:
-            if fixture.group != None:
+            if fixture.group is not None:
                 game_length = self.timings.group_game_length
             else:
                 game_length = self.timings.game_length
@@ -245,14 +245,13 @@ class Tournament:
             if self.timings.day2_start > current_time[fixture.pitch] > self.timings.day1_end:
                 current_time[fixture.pitch] = self.timings.day2_start
 
-            if fixture.game_start == None:
+            if fixture.game_start is None:
                 fixture.game_start = current_time[fixture.pitch]
                 fixture.game_length = game_length
                 current_time[fixture.pitch] += game_length + self.timings.game_break
             else:
                 # Fixture already has a time assigned, skip
                 current_time[fixture.pitch] += (fixture.game_length + self.timings.game_break)
-
 
     def print_schedule(self):
         """Output schedule in easy to read format"""
@@ -262,8 +261,7 @@ class Tournament:
         assert len(fixtures_by_pitch) == self.total_pitches, "incorrect fixtures_by_pitch initialisation"
 
         for fixture in self.schedule:
-            fixtures_by_pitch[fixture.pitch-1].append(fixture)
-
+            fixtures_by_pitch[fixture.pitch - 1].append(fixture)
 
         # Find longest dimension list
         longest_length = len(max(fixtures_by_pitch, key=lambda col: len(col)))
@@ -274,8 +272,8 @@ class Tournament:
         print("longest_length", longest_length)
         print(header)
         for i in range(longest_length):
-            fixture_info = []
-            fixture_info.append(" {} ".format(datetime.datetime.strftime(fixtures_by_pitch[0][i].game_start,'%d/%m %H:%M')))
+            fixture_info = [
+                " {} ".format(datetime.datetime.strftime(fixtures_by_pitch[0][i].game_start, '%d/%m %H:%M'))]
             for pitch in range(self.total_pitches):
                 try:
                     fixture = fixtures_by_pitch[pitch][i]
@@ -299,7 +297,7 @@ class Tournament:
         # relative to current fixture list
 
         priorities = {}
-        for g_key,group in remaining_matches.items():
+        for g_key, group in remaining_matches.items():
             priorities[g_key] = []
             for match_up in group:
                 # Assess match priority
@@ -311,10 +309,10 @@ class Tournament:
                 t2_games_played = 0
                 t2_last_game_time = self.timings.day1_start
                 for fixture in self.schedule:
-                    if (fixture.team1 == match_up.team1 or fixture.team1 == match_up):
+                    if fixture.team1 == match_up.team1 or fixture.team1 == match_up:
                         t1_games_played += 1
                         t1_last_game_time = fixture.game_start
-                    if (fixture.team2 == match_up.team1 or fixture.team2 == match_up.team2):
+                    if fixture.team2 == match_up.team1 or fixture.team2 == match_up.team2:
                         t2_last_game_time = fixture.game_start
                         t2_games_played += 1
 
@@ -323,8 +321,9 @@ class Tournament:
                 time_since_last_game = min([self.current_time_slot - t1_last_game_time,
                                             self.current_time_slot - t2_last_game_time])
 
-                priority = (24.0 - time_since_last_game.seconds/3600.0) + (10 - total_games_played)*10
-                if time_since_last_game < (min([self.timings.game_length, self.timings.group_game_length]) + self.timings.game_break):
+                priority = (24.0 - time_since_last_game.seconds / 3600.0) + (10 - total_games_played) * 10
+                if time_since_last_game < (
+                        min([self.timings.game_length, self.timings.group_game_length]) + self.timings.game_break):
                     if t1_games_played == 0 and t2_games_played == 0:
                         pass
                     else:
@@ -359,18 +358,18 @@ class Pitch:
 
 
 class Fixture:
-    def __init__(self, team1, team2, pitch, game_start, game_length, group = None):
+    def __init__(self, team1, team2, pitch, game_start, game_length, group=None):
         self.team1 = team1  # Team Object
         self.team2 = team2  # Team Object
         self.pitch = pitch  #
         self.group = group  # Group ID
         self.game_start = game_start
-        if self.game_start == None:
+        if self.game_start is None:
             self.game_start = datetime.datetime.now()
         self.game_length = game_length
 
     def __str__(self):
-        if self.group == None:
+        if self.group is None:
             group = "-"
         else:
             group = self.group
@@ -385,4 +384,3 @@ Timings = collections.namedtuple('Timings', ['group_game_length',
                                              'day2_start',
                                              'day1_end',
                                              'day2_end'])
-
