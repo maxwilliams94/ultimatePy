@@ -1,12 +1,10 @@
-from tournament import Tournament
-from tournament import Timings
+from tournament import Tournament, Timings
 from datetime import datetime, timedelta
-
 
 # Expect team list to be input from file in seed order
 
-
 if __name__ == '__main__':
+
     team_input = ["Uni A 1", "Uni B", "Uni C", "Uni D", "Uni E", "Uni A 2", "Uni G", "Uni H", "Uni A 3", "Uni B 2",
                   "Uni C 2", "Uni D 2"]
     # Tournament timings stored within namedTuple
@@ -16,8 +14,8 @@ if __name__ == '__main__':
                       game_break=timedelta(minutes=5),
                       day1_start=datetime(year=1, month=1, day=1, hour=9),
                       day2_start=datetime(year=1, month=1, day=2, hour=9),
-                      day1_end=datetime(year=1, month=1, day=1, hour = 17),
-                      day2_end=datetime(year=1, month=1, day=2, hour = 17))
+                      day1_end=datetime(year=1, month=1, day=1, hour=17),
+                      day2_end=datetime(year=1, month=1, day=2, hour=17))
 
     tournament = Tournament(team_input)
     tournament.create_groups(group_size=4)
@@ -33,12 +31,13 @@ if __name__ == '__main__':
     # tournament.assign_timings_to_schedule()
     # print("Assign Timings to Schedule")
 
-
     tournament.create_bracket()
 
     tournament.print_schedule()
 
 # todos
+# todo modulise scheduling
+# todo broken scheduling
 # todo check prints to console
 # todo bracket stage completion
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games

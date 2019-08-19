@@ -6,20 +6,20 @@ from copy import deepcopy
 from sys import exit
 import collections
 
-def create_group_match_ups(group_size):
+def get_group_match_up_indices(group_size):
     """
     Create a list of tuples for possible team1 and team2 index
     combinations. When a team is chosen as t1, it is removed from t2
     to stop double counting
+    :rtype: tuple array
     :param group_size: number of teams in a group
-    :return: a list of match up tuples
     """
     match_ups = []
-    team_ones = list(range(0,group_size))
-    team_twos = list(range(0,group_size))
+    team_ones = list(range(0, group_size))
+    team_twos = list(range(0, group_size))
     for t1 in team_ones:
         for t2 in team_twos:
-            if t1 != t2: match_ups.append((t1,t2))
+            if t1 != t2: match_ups.append((t1, t2))
 
         team_twos.pop(team_twos.index(t1))
 
@@ -112,6 +112,9 @@ class Tournament:
 
     def create_group_stage(self):
         """
+        create match_ups dictionary of Fixture objects
+        assign_fixtures_to_schedule()
+            get_match_priority()
         """
         self.max_concurrent_games = min([self.total_pitches, self.group_size//2])
 
@@ -119,16 +122,9 @@ class Tournament:
         match_ups = {}
         match_priority = {}
         for group in self.groups.values():
-            match_ups[group.index] = []
             match_priority[group.index] = []
-            match_up_indices = create_group_match_ups(self.group_size)
-            for t1,t2 in match_up_indices:
-                match_ups[group.index].append(deepcopy(Fixture(group.team_list[t1],
-                                                               group.team_list[t2],
-                                                               -1,
-                                                               None,
-                                                               None,
-                                                               group.index)))
+
+            match_ups[group.index] = self.create_group_fixtures(group)
 
         self.assign_fixtures_to_schedule(cycle(iter(self.groups.keys())), match_ups, group_game=True)
 
@@ -217,6 +213,20 @@ class Tournament:
 
         # Assign match ups to schedule
         self.assign_fixtures_to_schedule(iter(cycle(['top', 'bottom'])), match_ups, group_game=False)
+
+    def create_group_fixtures(self, group):
+        # Generate list of (t1, t2) tuples for a generic group
+        matchup_indices = get_group_match_up_indices(self.group_size)
+        group_fixtures = []
+        for t1, t2 in matchup_indices:
+            group_fixtures.append(deepcopy(Fixture(group.get_team_by_index(t1),
+                                                   group.get_team_by_index(t2),
+                                                   -1,
+                                                   None,
+                                                   None,
+                                                   group.index)))
+
+        return group_fixtures
 
     def assign_timings_to_schedule(self):
         """
