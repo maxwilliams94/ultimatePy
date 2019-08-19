@@ -23,3 +23,6 @@ class Group:
         for team in self.team_list:
             team_str += "{:<2} {}\n".format(team.seed, team.name)
         return team_str
+
+    def get_team_by_index(self, index):
+        return self.team_list[index]
