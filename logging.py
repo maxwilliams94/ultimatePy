@@ -9,7 +9,7 @@ class Logging:
     @staticmethod
     def _open_log_file(log_file):
         # Check path exists
-        if os.path.exists(log_file):
+        if os.path.exists(os.path.dirname(log_file)):
             try:
                 file = open(log_file, 'a')
             except OSError:
@@ -27,10 +27,10 @@ class Logging:
             log = cls._open_log_file(log_file)
             if type(log) is int:
                 print("Log File Error: Incorrect path for writing\n Defaulting to ./logfile.log")
-                log_file = "."
+                log_file = os.path.join(os.getcwd(), "tournament.log")
         # If file is empty, first write the header
         if os.path.getsize(log_file) == 0:
-            log.write("{:25s}\t{:25s}\t{:35s}\n".format("Stage", "Event", "Result/Details"))
+            log.write("{:35s}\t{:35s}\t{:55s}\n".format("Stage", "Event", "Result/Details"))
 
-        log.write("{:25s}\t{:25s}\t{:35s}\n".format(stage, event, result))
+        log.write("{:35s}\t{:35s}\t{:55s}\n".format(stage, event, result))
         return None

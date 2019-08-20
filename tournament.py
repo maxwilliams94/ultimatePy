@@ -6,7 +6,7 @@ import datetime
 from copy import deepcopy
 from sys import exit
 import collections
-from os import path
+from os import path, getcwd
 
 
 class Tournament:
@@ -18,7 +18,7 @@ class Tournament:
 
     def __init__(self, team_list, name="tournament"):
         self.name = name
-        self.log_file = path.join(".", self.name + ".log")
+        self.log_file = path.join(getcwd(), self.name + ".log")
         self.groups = {}
         self.teams = {}
         self.pitches = {}
@@ -109,12 +109,17 @@ class Tournament:
         """
         self.max_concurrent_games = min([self.total_pitches, self.group_size // 2])
 
+        Logging.write_log_event(self.log_file,
+                                "create_group_stage",
+                                "-",
+                                'max concurrent games: {}'.format(self.max_concurrent_games))
+
         # Create dictionary of group game match ups (as fixtures)
         match_ups = {}
         for group in self.groups.values():
             match_ups[group.index] = self.create_group_fixtures(group)
 
-        self.assign_fixtures_to_schedule(cycle(iter(self.groups.keys())), match_ups, group_game=True)
+        self.assign_fixtures_to_schedule(self.groups.keys(), match_ups, group_game=True)
 
     @staticmethod
     def get_group_match_up_indices(group_size):
@@ -137,13 +142,18 @@ class Tournament:
 
         return match_ups
 
-    def assign_fixtures_to_schedule(self, groups, fixtures, group_game):
-
+    def assign_fixtures_to_schedule(self, group_keys, fixtures, group_game):
+        groups_it = cycle(iter(group_keys))
         pitches = cycle(range(self.total_pitches))
         pitch = next(pitches)
-        group = next(groups)
-        iconcurrent = 0
+        group = next(groups_it)
+        i_concurrent = 0
         assigned_fixtures = 0
+
+        Logging.write_log_event(self.log_file,
+                                '-',
+                                'assign_fixtures_to_schedule',
+                                'Begin assigning {} games to schedule'.format(sum(len(matches) for matches in fixtures.values())))
 
         while True:
 
@@ -162,7 +172,7 @@ class Tournament:
             match_to_append.pitch = pitch
             self.schedule.append(match_to_append)
             assigned_fixtures += 1
-            iconcurrent += 1
+            i_concurrent += 1
 
             # Increment pitch for next game
             pitch = next(pitches)
@@ -171,9 +181,9 @@ class Tournament:
                 self.current_time_slot = self.increment_current_time(self.current_time_slot, group_game=group_game)
 
             # Increment group if max concurrent games has been reached
-            if iconcurrent == self.max_concurrent_games:
-                iconcurrent = 0
-                group = next(groups)
+            if i_concurrent == self.max_concurrent_games:
+                i_concurrent = 0
+                group = next(groups_it)
 
     def create_bracket(self):
         """
@@ -196,7 +206,7 @@ class Tournament:
             print(len(grouped_seeds['bottom']))
             exit(1)
 
-        # Create dictonary of lists of level 1 bracket match ups
+        # Create dictionary of lists of level 1 bracket match ups
         # todo dictionary creation should be in a method to avoid repetition for both group and bracket stages
         seed_combos = {}
         match_ups = {}
@@ -218,11 +228,11 @@ class Tournament:
                                                      None)))
 
         # Assign match ups to schedule
-        self.assign_fixtures_to_schedule(iter(cycle(['top', 'bottom'])), match_ups, group_game=False)
+        self.assign_fixtures_to_schedule(['top', 'bottom'], match_ups, group_game=False)
 
     def create_group_fixtures(self, group):
         # Generate list of (t1, t2) tuples for a generic group
-        matchup_indices = get_group_match_up_indices(self.group_size)
+        matchup_indices = self.get_group_match_up_indices(self.group_size)
         group_fixtures = []
         for t1, t2 in matchup_indices:
             group_fixtures.append(deepcopy(Fixture(group.get_team_by_index(t1),
