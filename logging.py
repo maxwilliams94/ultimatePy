@@ -30,7 +30,7 @@ class Logging:
                 log_file = "."
         # If file is empty, first write the header
         if os.path.getsize(log_file) == 0:
-            log.write("{:15s}\t{:15s}\t{:15s}\n".format("Stage", "Event", "Result/Details"))
+            log.write("{:25s}\t{:25s}\t{:35s}\n".format("Stage", "Event", "Result/Details"))
 
-        log.write("{:15s}\t{:15s}\t{:15s}\n".format(stage, event, result))
+        log.write("{:25s}\t{:25s}\t{:35s}\n".format(stage, event, result))
         return None
