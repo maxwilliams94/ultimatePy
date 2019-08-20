@@ -36,7 +36,6 @@ if __name__ == '__main__':
     tournament.print_schedule()
 
 # todos
-# todo modulise scheduling
 # todo broken scheduling
 # todo check prints to console
 # todo bracket stage completion
