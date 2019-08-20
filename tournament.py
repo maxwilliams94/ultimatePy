@@ -1,12 +1,12 @@
 from groups import Group
 from teams import Team
+from logging import Logging
 from itertools import cycle
 import datetime
 from copy import deepcopy
 from sys import exit
 import collections
-
-
+from os import path
 
 
 class Tournament:
@@ -18,6 +18,7 @@ class Tournament:
 
     def __init__(self, team_list, name="tournament"):
         self.name = name
+        self.log_file = path.join(".", self.name + ".log")
         self.groups = {}
         self.teams = {}
         self.pitches = {}
@@ -39,8 +40,12 @@ class Tournament:
         # Populate teams with Team objects
         for pos, team in enumerate(team_list):
             self.teams[pos + 1] = Team(team, pos + 1)
-
         self.total_teams = len(team_list)
+
+        Logging.write_log_event(self.log_file,
+                                'Tournament object initialisation',
+                                'Populated dict teams',
+                                'Total teams: {}'.format(self.total_teams))
 
     def create_groups(self, group_size=4):
         self.group_size = group_size
