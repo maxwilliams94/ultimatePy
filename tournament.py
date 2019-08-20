@@ -16,7 +16,8 @@ class Tournament:
     contain values which are Team, Group and Pitch object respectively.
     """
 
-    def __init__(self, team_list):
+    def __init__(self, team_list, name="tournament"):
+        self.name = name
         self.groups = {}
         self.teams = {}
         self.pitches = {}

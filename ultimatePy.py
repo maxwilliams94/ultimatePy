@@ -17,7 +17,7 @@ if __name__ == '__main__':
                       day1_end=datetime(year=1, month=1, day=1, hour=17),
                       day2_end=datetime(year=1, month=1, day=2, hour=17))
 
-    tournament = Tournament(team_input)
+    tournament = Tournament(team_input, "tournament")
     tournament.create_groups(group_size=4)
     tournament.create_pitches(total_pitches=3)
     tournament.set_timings(timings)
