@@ -7,7 +7,7 @@ class Logging:
     """
 
     @staticmethod
-    def open_log_file(log_file):
+    def _open_log_file(log_file):
         # Check path exists
         if os.path.exists(log_file):
             try:
@@ -24,7 +24,7 @@ class Logging:
         log = None
         while type(log) is int or log is None:
             # Get file object in append/write mode
-            log = cls.open_log_file(log_file)
+            log = cls._open_log_file(log_file)
             if type(log) is int:
                 print("Log File Error: Incorrect path for writing")
                 log_file = "."
