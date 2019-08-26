@@ -5,10 +5,13 @@ class Team:
         self.group = ""
         self.groupSeed = -1
         self.grp_pos = 0
-        self.id = seed
+        self._id = seed
         self.goal_diff = 0
         self.group_points = 0
 
     def __str__(self):
         return "{} {}".format(self.seed, self.name)
 
+    @property
+    def id(self):
+        return self._id
