@@ -31,7 +31,7 @@ class Logging:
         # If file is empty, first write the header
         if os.path.getsize(log_file) == 0:
             log.write("{:35s}\t{:35s}\t{:55s}\n".format("Stage", "Event", "Result/Details"))
-            log.write("{:35s}\t{:35s}\t{:55s}\n".format(35*"-", 35*"-", 35*"-"))
+            log.write("{:35s}\t{:35s}\t{:55s}\n".format(35*"-", 35*"-", 55*"-"))
 
         log.write("{:35s}\t{:35s}\t{:55s}\n".format(stage, event, result))
         log.close()

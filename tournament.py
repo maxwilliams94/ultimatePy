@@ -111,7 +111,7 @@ class Tournament:
 
         Logging.write_log_event(self.log_file,
                                 "create_group_stage",
-                                "-",
+                                ""
                                 'max concurrent games: {}'.format(self.max_concurrent_games))
 
         # Create dictionary of group game match ups (as fixtures)
@@ -119,7 +119,7 @@ class Tournament:
         for group in self.groups.values():
             match_ups[group.index] = self.create_group_fixtures(group)
 
-        self.assign_fixtures_to_schedule(self.groups.keys(), match_ups, group_game=True)
+        self.assign_fixtures_to_schedule(self.groups.keys(), match_ups, group_game=True, log_stage="create_group_stage")
 
     @staticmethod
     def get_group_match_up_indices(group_size):
@@ -142,7 +142,7 @@ class Tournament:
 
         return match_ups
 
-    def assign_fixtures_to_schedule(self, group_keys, fixtures, group_game):
+    def assign_fixtures_to_schedule(self, group_keys, fixtures, group_game, log_stage="-"):
         groups_it = cycle(iter(group_keys))
         pitches = cycle(range(self.total_pitches))
         pitch = next(pitches)
@@ -151,7 +151,7 @@ class Tournament:
         assigned_fixtures = 0
 
         Logging.write_log_event(self.log_file,
-                                '-',
+                                log_stage,
                                 'assign_fixtures_to_schedule',
                                 'Begin assigning {} games to schedule'.format(sum(len(matches) for matches in fixtures.values())))
 
@@ -228,7 +228,7 @@ class Tournament:
                                                      None)))
 
         # Assign match ups to schedule
-        self.assign_fixtures_to_schedule(['top', 'bottom'], match_ups, group_game=False)
+        self.assign_fixtures_to_schedule(['top', 'bottom'], match_ups, group_game=False, log_stage="create_bracket")
 
     def create_group_fixtures(self, group):
         # Generate list of (t1, t2) tuples for a generic group
