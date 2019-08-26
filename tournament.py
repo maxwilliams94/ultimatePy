@@ -111,7 +111,7 @@ class Tournament:
 
         Logging.write_log_event(self.log_file,
                                 "create_group_stage",
-                                ""
+                                "",
                                 'max concurrent games: {}'.format(self.max_concurrent_games))
 
         # Create dictionary of group game match ups (as fixtures)
@@ -143,33 +143,51 @@ class Tournament:
         return match_ups
 
     def assign_fixtures_to_schedule(self, group_keys, fixtures, group_game, log_stage="-"):
+        """
+        :param group_keys: list of groups, made into a cycled iterable
+        :param fixtures: dictionary of fixtures with pitch, time emitted, containing only the teams involved
+        :param group_game: True/False
+        :param log_stage: information for logging
+        :return: None
+        """
         groups_it = cycle(iter(group_keys))
         pitches = cycle(range(self.total_pitches))
         pitch = next(pitches)
         group = next(groups_it)
         i_concurrent = 0
         assigned_fixtures = 0
+        match_to_append = Fixture(None, None, None, None, None)
 
         Logging.write_log_event(self.log_file,
                                 log_stage,
                                 'assign_fixtures_to_schedule',
-                                'Begin assigning {} games to schedule'.format(sum(len(matches) for matches in fixtures.values())))
+                                'Begin assigning {} games to schedule'.format(
+                                    sum(len(matches) for matches in fixtures.values())))
 
         while True:
-
             # Get match priorities
             match_priority = self.return_match_priorities(fixtures)
             try:
-                prioritised_match_index = match_priority[group].index(max(match_priority[group]))
+                prio_i_match = match_priority[group].index(max(match_priority[group]))
             except ValueError:
                 print("Assigned {} fixtures to the schedule".format(assigned_fixtures))
                 break
 
-            match_to_append = fixtures[group].pop(prioritised_match_index)
+            match_to_append = fixtures[group].pop(prio_i_match)
 
             # Assign Time and Pitch to match before adding to schedule
             match_to_append.game_start = self.current_time_slot
             match_to_append.pitch = pitch
+            # Log chosen fixture to append
+            Logging.write_log_event(path.join(getcwd(), 'create_group_stage.log'),
+                                    log_stage,
+                                    'highest priority match chosen',
+                                    'T:{} P:{} T1:{} T2:{} Priority:{:5.0f}'
+                                    .format(match_to_append.game_start.strftime('%H:%M'),
+                                            match_to_append.pitch,
+                                            match_to_append.team1.name,
+                                            match_to_append.team2.name,
+                                            match_priority[group][prio_i_match]))
             self.schedule.append(match_to_append)
             assigned_fixtures += 1
             i_concurrent += 1
@@ -184,6 +202,8 @@ class Tournament:
             if i_concurrent == self.max_concurrent_games:
                 i_concurrent = 0
                 group = next(groups_it)
+
+        return None
 
     def create_bracket(self):
         """
@@ -325,10 +345,10 @@ class Tournament:
                 t2_games_played = 0
                 t2_last_game_time = self.timings.day1_start
                 for fixture in self.schedule:
-                    if fixture.team1 == match_up.team1 or fixture.team1 == match_up:
+                    if fixture.team1.id == match_up.team1.id or fixture.team2.id == match_up.team2.id:
                         t1_games_played += 1
                         t1_last_game_time = fixture.game_start
-                    if fixture.team2 == match_up.team1 or fixture.team2 == match_up.team2:
+                    if fixture.team1.id == match_up.team1.id or fixture.team2.id == match_up.team2.id:
                         t2_last_game_time = fixture.game_start
                         t2_games_played += 1
 

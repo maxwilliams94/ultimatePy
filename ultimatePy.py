@@ -36,7 +36,6 @@ if __name__ == '__main__':
     tournament.print_schedule()
 
 # todos
-# todo broken scheduling
 # todo check prints to console
 # todo bracket stage completion
 # todo create a method which creates fixtures (returns the fixture object but allows Team.number_of_games
