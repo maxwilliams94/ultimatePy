@@ -297,7 +297,7 @@ class Tournament:
         assert len(fixtures_by_pitch) == self.total_pitches, "incorrect fixtures_by_pitch initialisation"
 
         for fixture in self.schedule:
-            fixtures_by_pitch[fixture.pitch - 1].append(fixture)
+            fixtures_by_pitch[fixture.pitch].append(fixture)
 
         # Find longest dimension list
         longest_length = len(max(fixtures_by_pitch, key=lambda col: len(col)))
