@@ -1,4 +1,4 @@
-from tournament import Tournament, Timings
+from archive.tournament import Tournament, Timings
 from datetime import datetime, timedelta
 
 # Expect team list to be input from file in seed order

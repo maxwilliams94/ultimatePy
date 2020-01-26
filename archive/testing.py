@@ -1,6 +1,6 @@
 """Integrating Testing for ultimatepy"""
 
-from tournament import Tournament, Timings
+from archive.tournament import Tournament, Timings
 from datetime import datetime, timedelta
 
 team_input = ["Uni 1", "Uni 2", "Uni 3", "Uni 4", "Uni 5", "Uni 6", "Uni 7", "Uni 8"]

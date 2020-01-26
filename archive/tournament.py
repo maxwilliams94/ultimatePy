@@ -1,5 +1,5 @@
-from groups import Group
-from teams import Team
+from archive.groups import Group
+from archive.teams import Team
 from logging import Logging
 from itertools import cycle
 import datetime
