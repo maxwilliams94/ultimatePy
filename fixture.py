@@ -1,7 +1,7 @@
 """
 Classes for a fixture (teams, time, location) and Schedule (collated fixtures)
 """
-from classes.team import Team
+from team import Team
 
 class Fixture(object):
     def __init__(self, team1: Team, team2: Team, time_slot: int, location: int):
