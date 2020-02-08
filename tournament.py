@@ -3,8 +3,8 @@ Tournament class: storage of teams, schedules and output methods
 """
 from collections import namedtuple
 
-TournamentDay = namedtuple('TournamentDayTimings', 'date t_start t_end num_pitches')  # Day-specific information
-DayTiming = TournamentDay
+TournamentDayTimings = namedtuple('TournamentDayTimings', 'date t_start t_end num_pitches')  # Day-specific information
+DayTiming = TournamentDayTimings
 
 
 class Tournament(object):
